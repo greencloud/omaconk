@@ -134,6 +134,26 @@ Ui.BarWidget {
     }
   }
 
+  component Section: Rectangle {
+    default property alias entries: rows.data
+    readonly property int inset: Commons.Style.space(9)
+
+    Layout.fillWidth: true
+    implicitWidth: rows.implicitWidth + inset * 2
+    implicitHeight: rows.implicitHeight + inset * 2
+    color: "transparent"
+    radius: Commons.Style.space(5)
+    border.width: 1
+    border.color: Commons.Util.alpha(Commons.Color.popups.text, 0.22)
+
+    ColumnLayout {
+      id: rows
+      anchors.fill: parent
+      anchors.margins: parent.inset
+      spacing: Commons.Style.space(5)
+    }
+  }
+
   Ui.KeyboardPanel {
     id: popup
     anchorItem: button
@@ -156,7 +176,7 @@ Ui.BarWidget {
       ColumnLayout {
         id: details
         width: parent.width
-        spacing: Commons.Style.space(5)
+        spacing: Commons.Style.space(8)
 
         Label {
           text: strings.t("title")
@@ -166,43 +186,53 @@ Ui.BarWidget {
           visible: !root.readings
           text: strings.t(root.sampleFailed ? "unavailable" : "waiting")
         }
-        Metric {
+        Section {
           visible: !!root.readings
-          caption: strings.t("cpu")
-          value: root.readings ? root.format(root.readings.cpu, 1) + "%" : ""
-        }
-        Metric {
-          visible: !!root.readings
-          caption: strings.t("load")
-          value: root.readings ? root.readings.loads.map(value => root.format(value, 2)).join(" / ") : ""
-        }
-        Metric {
-          visible: !!root.readings
-          caption: strings.t("ram")
-          value: root.readings ? root.usage(root.readings.ram) : ""
-        }
-        Metric {
-          visible: !!root.readings
-          caption: strings.t("swap")
-          value: root.readings ? root.usage(root.readings.swap) : ""
+          Metric {
+            caption: strings.t("cpu")
+            value: root.readings ? root.format(root.readings.cpu, 1) + "%" : ""
+          }
+          Metric {
+            caption: strings.t("load")
+            value: root.readings ? root.readings.loads.map(value => root.format(value, 2)).join(" / ") : ""
+          }
         }
 
-        Ui.PanelSectionHeader { text: strings.t("temperatures") }
-        Repeater {
-          model: root.temperatureRows
+        Section {
+          visible: !!root.readings
           Metric {
-            required property var modelData
-            caption: modelData[0]
-            value: modelData[1]
+            caption: strings.t("ram")
+            value: root.readings ? root.usage(root.readings.ram) : ""
+          }
+        }
+
+        Section {
+          visible: !!root.readings
+          Metric {
+            caption: strings.t("swap")
+            value: root.readings ? root.usage(root.readings.swap) : ""
+          }
+        }
+
+        Section {
+          Ui.PanelSectionHeader { text: strings.t("temperatures") }
+          Repeater {
+            model: root.temperatureRows
+            Metric {
+              required property var modelData
+              caption: modelData[0]
+              value: modelData[1]
+            }
           }
         }
 
         RowLayout {
           Layout.fillWidth: true
-          spacing: Commons.Style.space(20)
+          visible: !!root.readings
+          spacing: Commons.Style.space(8)
 
-          ColumnLayout {
-            Layout.fillWidth: true
+          Section {
+            Layout.alignment: Qt.AlignTop
             Layout.preferredWidth: 1
             Ui.PanelSectionHeader { text: strings.t("topCpu") }
             Repeater {
@@ -214,8 +244,8 @@ Ui.BarWidget {
               }
             }
           }
-          ColumnLayout {
-            Layout.fillWidth: true
+          Section {
+            Layout.alignment: Qt.AlignTop
             Layout.preferredWidth: 1
             Ui.PanelSectionHeader { text: strings.t("topRam") }
             Repeater {
@@ -229,23 +259,25 @@ Ui.BarWidget {
           }
         }
 
-        Ui.PanelSectionHeader { text: strings.t("network") }
-        Metric {
-          caption: strings.t("dns")
-          value: root.readings && root.readings.dns.length ? root.readings.dns.join("\n") : "—"
-        }
-        Metric {
-          visible: root.publicAddress !== "" || lookup.running
-          caption: strings.t("public")
-          value: lookup.running ? strings.t("checking") : root.publicAddress
-        }
-        Ui.Button {
-          Layout.alignment: Qt.AlignRight
-          text: strings.t(root.publicAddress ? "refresh" : "lookup")
-          enabled: !lookup.running
-          bordered: true
-          focusable: true
-          onClicked: lookup.running = true
+        Section {
+          Ui.PanelSectionHeader { text: strings.t("network") }
+          Metric {
+            caption: strings.t("dns")
+            value: root.readings && root.readings.dns.length ? root.readings.dns.join("\n") : "—"
+          }
+          Metric {
+            visible: root.publicAddress !== "" || lookup.running
+            caption: strings.t("public")
+            value: lookup.running ? strings.t("checking") : root.publicAddress
+          }
+          Ui.Button {
+            Layout.alignment: Qt.AlignRight
+            text: strings.t(root.publicAddress ? "refresh" : "lookup")
+            enabled: !lookup.running
+            bordered: true
+            focusable: true
+            onClicked: lookup.running = true
+          }
         }
       }
     }
