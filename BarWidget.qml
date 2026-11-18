@@ -135,21 +135,23 @@ Ui.BarWidget {
   }
 
   component Section: Rectangle {
+    id: section
     default property alias entries: rows.data
     readonly property int inset: Commons.Style.space(9)
 
     Layout.fillWidth: true
     implicitWidth: rows.implicitWidth + inset * 2
     implicitHeight: rows.implicitHeight + inset * 2
-    color: "transparent"
-    radius: Commons.Style.space(5)
+    color: Commons.Util.alpha(Commons.Color.popups.text, 0.06)
+    radius: Commons.Style.space(8)
     border.width: 1
-    border.color: Commons.Util.alpha(Commons.Color.popups.text, 0.22)
+    border.color: Commons.Util.alpha(Commons.Color.popups.text, 0.42)
 
-    ColumnLayout {
+    readonly property Item contentLayout: ColumnLayout {
       id: rows
-      anchors.fill: parent
-      anchors.margins: parent.inset
+      parent: section
+      anchors.fill: section
+      anchors.margins: section.inset
       spacing: Commons.Style.space(5)
     }
   }
