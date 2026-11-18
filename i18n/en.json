@@ -1,0 +1,19 @@
+{
+  "title": "System Monitor",
+  "cpu": "CPU utilization",
+  "load": "Load average · 1 / 5 / 15 min",
+  "ram": "Memory",
+  "swap": "Swap",
+  "noSwap": "Disabled",
+  "temperatures": "Temperatures",
+  "topCpu": "Top 3 by CPU",
+  "topRam": "Top 3 by RAM",
+  "network": "Network",
+  "dns": "DNS servers",
+  "public": "Public IP",
+  "lookup": "Look up via ipify",
+  "refresh": "Refresh via ipify",
+  "checking": "Looking up…",
+  "waiting": "Reading system metrics…",
+  "unavailable": "Unavailable"
+}

@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "id": "local.system-monitor",
+  "name": "System Monitor",
+  "version": "1.0.0",
+  "author": "Local",
+  "description": "Live hardware, process, and network readings",
+  "kinds": ["bar-widget"],
+  "entryPoints": {"barWidget": "BarWidget.qml"},
+  "barWidget": {
+    "displayName": "System Monitor",
+    "description": "Live temperatures, CPU, memory, processes, and network",
+    "category": "System",
+    "allowMultiple": false
+  }
+}
