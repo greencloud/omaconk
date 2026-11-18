@@ -147,13 +147,14 @@ Ui.BarWidget {
     border.width: 1
     border.color: Commons.Util.alpha(Commons.Color.popups.text, 0.42)
 
-    readonly property Item contentLayout: ColumnLayout {
-      id: rows
-      parent: section
-      anchors.fill: section
-      anchors.margins: section.inset
-      spacing: Commons.Style.space(5)
-    }
+    children: [
+      ColumnLayout {
+        id: rows
+        anchors.fill: parent
+        anchors.margins: section.inset
+        spacing: Commons.Style.space(5)
+      }
+    ]
   }
 
   Ui.KeyboardPanel {
